@@ -1,13 +1,79 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My Website</title>
-    <link rel="stylesheet" href="style.css">
+    <title>My Blog</title>
+    <style>
+      body {
+        background-color: lightblue;
+        text-align: center;
+        font-family: sans-serif;
+      }
+
+      #blog-posts {
+        width: 80%;
+        margin: 0 auto;
+        text-align: left;
+      }
+
+      .blog-post {
+        margin: 20px 0;
+        padding: 20px;
+        background-color: white;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+      }
+
+      .blog-post h2 {
+        margin: 0;
+      }
+
+      #new-post-button {
+        background-color: lightgreen;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 20px 0;
+      }
+    </style>
   </head>
   <body>
-    <h1>Welcome to My Website</h1>
-    <p>This is a sample website created using HTML, CSS, and JavaScript.</p>
-    <button id="button">Click Me!</button>
-    <script src="script.js"></script>
+    <h1>Welcome to My Blog</h1>
+    <div id="blog-posts"></div>
+    <button id="new-post-button">New Post</button>
+    <script>
+      const blogPostsDiv = document.getElementById('blog-posts');
+      const newPostButton = document.getElementById('new-post-button');
+
+      newPostButton.addEventListener('click', () => {
+        // Prompt the user for the title and content of the new blog post
+        const title = prompt('Enter the title of the new blog post:');
+        const content = prompt('Enter the content of the new blog post:');
+
+        // Create a new blog post element
+        const newPost = document.createElement('div');
+        newPost.classList.add('blog-post');
+        newPost.innerHTML = `
+          <h2>${title}</h2>
+          <p>${content}</p>
+        `;
+
+        // Add the new blog post to the page
+        blogPostsDiv.appendChild(newPost);
+
+        // Add a link to the new blog post on the homepage
+        const homepageLink = document.createElement('a');
+        homepageLink.href = '#';
+        homepageLink.innerText = title;
+        homepageLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          newPost.scrollIntoView();
+        });
+        document.body.insertBefore(homepageLink, blogPostsDiv);
+      });
+    </script>
   </body>
 </html>
