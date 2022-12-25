@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My Blog</title>
+    <title>My Blogging webpage</title>
     <style>
       body {
         background-color: lightblue;
@@ -41,24 +41,25 @@
     </style>
   </head>
   <body>
-    <h1>Welcome to My for Blog</h1>
+    <h1>Welcome to My Blog</h1>
     <div id="blog-posts"></div>
     <button id="new-post-button">New Post</button>
     <script>
+      // Get the blog posts div and the new post button
       const blogPostsDiv = document.getElementById('blog-posts');
       const newPostButton = document.getElementById('new-post-button');
 
-      newPostButton.addEventListener('click', () => {
-        // Prompt the user for the title and content of the new blog post
-        const title = prompt('Enter the title of the new blog post:');
-        const content = prompt('Enter the content of the new blog post:');
+      // Check if there are any saved blog posts in local storage
+      const savedPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
 
+      // Load the saved blog posts into the page
+      savedPosts.forEach((post) => {
         // Create a new blog post element
         const newPost = document.createElement('div');
         newPost.classList.add('blog-post');
         newPost.innerHTML = `
-          <h2>${title}</h2>
-          <p>${content}</p>
+          <h2>${post.title}</h2>
+          <p>${post.content}</p>
         `;
 
         // Add the new blog post to the page
@@ -67,12 +68,72 @@
         // Add a link to the new blog post on the homepage
         const homepageLink = document.createElement('a');
         homepageLink.href = '#';
-        homepageLink.innerText = title;
+        homepageLink.innerText = post.title;
         homepageLink.addEventListener('click', (event) => {
           event.preventDefault();
           newPost.scrollIntoView();
         });
         document.body.insertBefore(homepageLink, blogPostsDiv);
+      });
+
+      // Add an event listener to the new post button
+      newPostButton.addEventListener('click', () => {
+        // Prompt the user for the title and content of the new blog post
+        const title = prompt('Enter the title of the new blog post:');
+        const content = prompt('Enter the content of the new blog post:');
+
+        // Create a new
+// Create a new blog post element
+const newPost = document.createElement('div');
+newPost.classList.add('blog-post');
+newPost.innerHTML = `
+  <h2>${title}</h2>
+  <p>${content}</p>
+`;
+
+// Add the new blog post to the page
+blogPostsDiv.appendChild(newPost);
+
+// Create a new link element
+const homepageLink = document.createElement('a');
+homepageLink.href = `/posts/${title}`;
+homepageLink.innerText = title;
+homepageLink.addEventListener('click', (event) => {
+  event.preventDefault();
+  newPost.scrollIntoView();
+});
+
+// Create a delete button for the blog post
+const deleteButton = document.createElement('button');
+deleteButton.innerText = 'Delete';
+deleteButton.addEventListener('click', () => {
+  // Prompt the user for the password
+  const password = prompt('Enter the password to delete this post:');
+
+  // Check if the password is correct
+  if (password === '1234') {
+    // Remove the blog post from the page and local storage
+    blogPostsDiv.removeChild(newPost);
+    savedPosts = savedPosts.filter((post) => post.title !== title);
+    localStorage.setItem('blogPosts', JSON.stringify(savedPosts));
+
+    // Remove the delete button
+    deleteButton.remove();
+  } else {
+    alert('Incorrect password');
+  }
+});
+
+// Add a line break between the link and delete button
+const lineBreak = document.createElement('br');
+document.body.insertBefore(lineBreak, blogPostsDiv);
+
+document.body.insertBefore(homepageLink, blogPostsDiv);
+document.body.insertBefore(deleteButton, blogPostsDiv);
+
+// Save the new blog post to local storage
+savedPosts.push({ title, content });
+localStorage.setItem('blogPosts', JSON.stringify(savedPosts));
       });
     </script>
   </body>
